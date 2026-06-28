@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimal Life Tracker</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#315f59">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Life Tracker">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="side">
+      <nav class="nav desktop-nav" aria-label="เมนูหลัก">
+        <button class="nav-btn active" data-tab="daily">Daily</button>
+        <button class="nav-btn" data-tab="oneTime">One-time</button>
+        <button class="nav-btn" data-tab="progress">Progress</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <button class="data-btn floating-data-btn" id="dataMenuBtn">ข้อมูล</button>
+      <section id="dataMenu" class="data-menu hidden"></section>
+      <section id="app" class="content" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="เมนูหลักบนมือถือ">
+    <button class="nav-btn active" data-tab="daily">Daily</button>
+    <button class="nav-btn" data-tab="oneTime">One-time</button>
+    <button class="nav-btn" data-tab="progress">Progress</button>
+  </nav>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
