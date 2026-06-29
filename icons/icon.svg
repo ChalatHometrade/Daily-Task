@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#FFF3D5"/>
+  <text x="93" y="330" font-family="Comic Sans MS, Chalkboard SE, Arial Rounded MT Bold, sans-serif" font-size="210" font-weight="800" fill="#F4A51C" stroke="#E18D14" stroke-width="6">M</text>
+  <text x="285" y="330" font-family="Comic Sans MS, Chalkboard SE, Arial Rounded MT Bold, sans-serif" font-size="210" font-weight="800" fill="#EF5A3C" stroke="#D9482F" stroke-width="6">L</text>
+  <circle cx="256" cy="118" r="44" fill="#F6B22D" stroke="#E99A18" stroke-width="8"/>
+  <path d="M239 113 Q247 127 258 128 Q274 127 283 107" stroke="#1D1D1D" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="240" cy="103" r="5" fill="#1D1D1D"/>
+  <circle cx="273" cy="103" r="5" fill="#1D1D1D"/>
+</svg>
