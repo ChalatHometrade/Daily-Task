@@ -1,27 +1,24 @@
-# Minimal Life Tracker
+# Minimal Life Tracker FINAL
 
-ไฟล์พร้อมอัปโหลดขึ้น GitHub Pages
+ชุดนี้เป็นไฟล์ final สำหรับอัปโหลดขึ้น GitHub Pages
 
-## ไฟล์หลัก
+## Upload to repository root
 - index.html
 - style.css
 - app.js
 - manifest.json
 - sw.js
-- icons/
 - .nojekyll
+- icons/
+- FINAL_CHECK_REPORT.json
 
-## วิธีขึ้น GitHub Pages
-1. สร้าง repository ใหม่
-2. อัปโหลดไฟล์ทั้งหมดในโฟลเดอร์นี้ไปที่ root ของ repository
-3. ไปที่ Settings > Pages
-4. Source เลือก Deploy from a branch
-5. Branch เลือก main และ folder เลือก /(root)
-6. กด Save
+## Important
+ห้ามอัปโหลดชื่อไฟล์แบบ app(164).js หรือ index(177).html
+ให้ใช้ชื่อ app.js และ index.html เท่านั้น
 
-## หลังเปิดเว็บ
-1. เปิดเว็บจาก GitHub Pages
-2. กด ข้อมูล
-3. ใส่ Google Apps Script Web App URL ที่ลงท้าย /exec
-4. กดบันทึก URL
-5. ระบบจะเปิด Auto Sync ให้เอง
+## After deploy
+1. เปิด GitHub Pages URL
+2. Daily page ต้องโหลดได้
+3. ไม่มีปุ่ม "ข้อมูล" ขวาบน
+4. Progress page มี Sync card
+5. Add to Home Screen ต้องเห็น icon พื้นหลังครีมสไตล์เด็กวาด

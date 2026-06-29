@@ -448,18 +448,6 @@ button:disabled {
   box-shadow: none;
 }
 
-.floating-data-btn {
-  position: fixed;
-  top: 16px;
-  right: 18px;
-  z-index: 25;
-  min-height: 36px;
-  padding: 7px 12px;
-  font-size: 0.86rem;
-  background: rgba(255, 253, 248, 0.72);
-  backdrop-filter: blur(14px);
-}
-
 .btn.success {
   background: var(--primary-soft);
   color: var(--primary-dark);
@@ -1184,6 +1172,14 @@ textarea {
   padding: 12px 14px;
   border-radius: var(--radius-md);
   background: rgba(31, 37, 35, 0.035);
+}
+
+.sync-status.compact {
+  padding: 10px 12px;
+}
+
+.sync-progress-card {
+  margin-bottom: 12px;
 }
 
 .sync-toggle {
