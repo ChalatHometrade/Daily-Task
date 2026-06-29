@@ -13,6 +13,7 @@ const state = {
   showDailyManager: false,
   showOneTimeForm: false,
   showDataMenu: false,
+  oneTimeExpandedIds: {},
   editingDailyId: null,
   editingOneTimeId: null,
   modal: {
@@ -938,13 +939,20 @@ function renderOneTimeStatusHeader(status, count) {
     in_progress: "status-in-progress",
     done: "status-done"
   };
+  const labels = {
+    not_started: "ยังไม่ได้ทำ",
+    in_progress: "กำลังทำ",
+    done: "ทำเสร็จแล้ว"
+  };
+  const label = labels[status] || labels.not_started;
   return `
-    <div class="one-time-section-header ${classes[status] || "status-not-started"}">
-      <div>
-        <span class="section-dot"></span>
-        <h3>${STATUS_LABELS[status]}</h3>
+    <div class="one-time-divider ${classes[status] || "status-not-started"}">
+      <div class="one-time-divider-title">
+        <span class="one-time-divider-dot"></span>
+        <h3>${label}</h3>
       </div>
-      <span class="count-pill">${count} งาน</span>
+      <span class="one-time-divider-line"></span>
+      <span class="one-time-divider-count">${count} งาน</span>
     </div>
   `;
 }
@@ -983,28 +991,87 @@ function renderOneTimeForm() {
 function renderOneTimeGroup(status) {
   const tasks = state.data.oneTimeTasks.filter((task) => task.status === status).sort((a, b) => sortOneTimeTasks(a, b, status));
   if (!tasks.length) return `<div class="empty">ยังไม่มีงาน</div>`;
-  return tasks.map((task) => `
-    <article class="one-card stack ${task.status === "in_progress" ? "in-progress" : ""}">
-      <div class="row between">
-        <div>
-          <strong>${escapeHtml(task.name)}</strong>
-          <div>
-            <span class="label priority-label ${priorityClass(task.priority)}">${escapeHtml(task.priority || "สำคัญปานกลาง")}</span>
-            <span class="label">สร้าง ${formatShortDate(task.createdAt)}</span>
-          </div>
-          ${task.completedAt ? `<div class="label">เสร็จ ${formatShortDate(task.completedAt)}</div>` : ""}
-        </div>
-        <div class="row">
-          <button class="btn ghost small" data-edit-one="${task.id}">แก้ไข</button>
-          <button class="btn danger small" data-delete-one="${task.id}">ลบ</button>
-        </div>
-      </div>
-      <div class="status-row">
-        ${Object.keys(STATUS_LABELS).map((key) => `<button class="status-btn ${task.status === key ? "active" : ""}" data-one-status="${key}" data-one-id="${task.id}">${STATUS_LABELS[key]}</button>`).join("")}
-      </div>
-      ${task.note ? `<div class="notice">${escapeHtml(task.note)}</div>` : ""}
+  return tasks.map(renderOneTimeTaskCard).join("");
+}
+
+function renderOneTimeTaskCard(task) {
+  const expanded = isOneTimeExpanded(task.id);
+  const statusClass = getOneTimeStatusClass(task.status);
+  const chevron = expanded ? "⌃" : "⌄";
+  const toggleLabel = expanded ? "ซ่อนรายละเอียดงาน" : "แสดงรายละเอียดงาน";
+  return `
+    <article class="one-time-task-card ${expanded ? "expanded" : "compact"} ${statusClass}">
+      <button class="one-time-task-main" type="button" data-action="toggle-one-time-details" data-id="${escapeHtml(task.id)}" aria-expanded="${expanded ? "true" : "false"}" aria-label="${toggleLabel}">
+        <span class="one-time-status-dot"></span>
+        <span class="one-time-task-title">${escapeHtml(task.name)}</span>
+        <span class="one-time-chevron" aria-hidden="true">${chevron}</span>
+      </button>
+      ${expanded ? renderOneTimeTaskDetails(task) : ""}
     </article>
-  `).join("");
+  `;
+}
+
+function renderOneTimeTaskDetails(task) {
+  return `
+    <div class="one-time-task-details">
+      <div class="one-time-status-actions">
+        ${renderOneTimeStatusButtons(task)}
+      </div>
+      <div class="one-time-meta">
+        <span class="label priority-label ${priorityClass(task.priority)}">${escapeHtml(task.priority || "สำคัญปานกลาง")}</span>
+        <span>สร้าง ${formatShortDate(task.createdAt)}</span>
+        ${task.updatedAt ? `<span>อัปเดต ${formatShortDate(task.updatedAt)}</span>` : ""}
+        ${task.completedAt ? `<span>เสร็จ ${formatShortDate(task.completedAt)}</span>` : ""}
+      </div>
+      ${task.note ? `<p class="one-time-note">${escapeHtml(task.note)}</p>` : ""}
+      <div class="one-time-manage-actions">
+        <button class="btn ghost small" data-edit-one="${escapeHtml(task.id)}">แก้ไข</button>
+        <button class="btn danger small" data-delete-one="${escapeHtml(task.id)}">ลบ</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderOneTimeStatusButtons(task) {
+  const statuses = [
+    { value: "not_started", label: "ยังไม่ได้ทำ", className: "not-started" },
+    { value: "in_progress", label: "กำลังทำ", className: "in-progress" },
+    { value: "done", label: "ทำเสร็จแล้ว", className: "done" }
+  ];
+  return `
+    <div class="one-time-status-segment" role="group" aria-label="เปลี่ยนสถานะงาน">
+      ${statuses.map((status) => {
+        const isActive = task.status === status.value;
+        return `
+          <button
+            class="one-time-status-pill ${status.className} ${isActive ? "active" : ""}"
+            data-one-status="${status.value}"
+            data-one-id="${escapeHtml(task.id)}"
+            aria-pressed="${isActive ? "true" : "false"}"
+            type="button"
+          >${status.label}</button>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function getOneTimeStatusClass(status) {
+  const classes = {
+    not_started: "status-not-started",
+    in_progress: "status-in-progress",
+    done: "status-done"
+  };
+  return classes[status] || classes.not_started;
+}
+
+function isOneTimeExpanded(id) {
+  return !!state.oneTimeExpandedIds[id];
+}
+
+function toggleOneTimeDetails(id) {
+  state.oneTimeExpandedIds[id] = !state.oneTimeExpandedIds[id];
+  renderApp();
 }
 
 function renderMoodSection() {
@@ -1382,6 +1449,7 @@ function updateOneTimeTask(id, values) {
 function deleteOneTimeTask(id) {
   if (!confirm("ลบงานนี้ใช่ไหม?")) return;
   state.data.oneTimeTasks = state.data.oneTimeTasks.filter((task) => task.id !== id);
+  delete state.oneTimeExpandedIds[id];
   saveUserDataChange();
   showToast("ลบงานแล้ว");
   renderApp();
@@ -2059,7 +2127,16 @@ function wireProgress() {
 
 function wireOneTime() {
   document.getElementById("openOneTimeTaskModal")?.addEventListener("click", () => openModal("oneTimeTask"));
-  document.querySelectorAll("[data-one-status]").forEach((button) => button.addEventListener("click", () => updateOneTimeStatus(button.dataset.oneId, button.dataset.oneStatus)));
+  document.querySelectorAll('[data-action="toggle-one-time-details"]').forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      toggleOneTimeDetails(button.dataset.id);
+    });
+  });
+  document.querySelectorAll("[data-one-status]").forEach((button) => button.addEventListener("click", () => {
+    if (button.getAttribute("aria-pressed") === "true") return;
+    updateOneTimeStatus(button.dataset.oneId, button.dataset.oneStatus);
+  }));
   document.querySelectorAll("[data-edit-one]").forEach((button) => button.addEventListener("click", () => {
     openModal("oneTimeTask", button.dataset.editOne);
   }));
