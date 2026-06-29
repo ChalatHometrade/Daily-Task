@@ -1,0 +1,22 @@
+{
+  "files": [
+    ".nojekyll",
+    "app.js",
+    "icons/apple-touch-icon-180.png",
+    "icons/icon-192.png",
+    "icons/icon-512.png",
+    "icons/icon-maskable-512.png",
+    "icons/icon.svg",
+    "index.html",
+    "manifest.json",
+    "style.css",
+    "sw.js"
+  ],
+  "apple_touch_icon_180_exists": true,
+  "index_apple_links": [
+    "<meta name=\"apple-mobile-web-app-title\" content=\"Life Tracker\">  <link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"icons/apple-touch-icon-180.png?v=3\">",
+    "<link rel=\"apple-touch-icon\" sizes=\"192x192\" href=\"icons/icon-192.png?v=3\">",
+    "<link rel=\"apple-touch-icon\" href=\"icons/apple-touch-icon-180.png?v=3\">"
+  ],
+  "sw_cache_name": "minimal-life-tracker-v3"
+}
