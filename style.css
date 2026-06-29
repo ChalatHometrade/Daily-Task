@@ -1021,11 +1021,88 @@ textarea {
   align-items: center;
 }
 
-.group-title {
-  margin: 24px 0 10px;
+.one-time-status-section {
+  display: grid;
+  gap: 8px;
+}
+
+.one-time-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 13px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 253, 248, 0.72);
+}
+
+.one-time-section-header > div {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 9px;
+}
+
+.one-time-section-header h3 {
+  margin: 0;
   color: var(--text);
   font-size: 0.98rem;
-  font-weight: 740;
+  font-weight: 780;
+  line-height: 1.25;
+}
+
+.section-dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--muted);
+}
+
+.count-pill {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  min-height: 26px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(31, 37, 35, 0.045);
+  font-size: 0.8rem;
+  font-weight: 720;
+  white-space: nowrap;
+}
+
+.status-not-started .section-dot {
+  background: var(--muted);
+}
+
+.status-in-progress {
+  background: rgba(244, 234, 219, 0.62);
+}
+
+.status-in-progress .section-dot {
+  background: var(--gold);
+}
+
+.status-in-progress .count-pill {
+  color: #745124;
+  background: var(--gold-soft);
+}
+
+.status-done {
+  background: rgba(229, 239, 236, 0.62);
+}
+
+.status-done .section-dot {
+  background: var(--primary);
+}
+
+.status-done .count-pill {
+  color: var(--primary-dark);
+  background: var(--primary-soft);
 }
 
 .status-row {

@@ -919,12 +919,32 @@ function renderOneTimeSection() {
     <div class="stack">
       ${renderOneTimeHeader()}
 
-      ${groups.map((status) => `
-        <section>
-          <h3 class="group-title">${STATUS_LABELS[status]}</h3>
+      ${groups.map((status) => {
+        const count = state.data.oneTimeTasks.filter((task) => task.status === status).length;
+        return `
+        <section class="one-time-status-section">
+          ${renderOneTimeStatusHeader(status, count)}
           <div class="stack">${renderOneTimeGroup(status)}</div>
         </section>
-      `).join("")}
+      `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderOneTimeStatusHeader(status, count) {
+  const classes = {
+    not_started: "status-not-started",
+    in_progress: "status-in-progress",
+    done: "status-done"
+  };
+  return `
+    <div class="one-time-section-header ${classes[status] || "status-not-started"}">
+      <div>
+        <span class="section-dot"></span>
+        <h3>${STATUS_LABELS[status]}</h3>
+      </div>
+      <span class="count-pill">${count} งาน</span>
     </div>
   `;
 }
